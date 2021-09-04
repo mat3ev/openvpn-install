@@ -5,24 +5,21 @@
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=angristan.openvpn-install)
 
 OpenVPN installer for Debian, Ubuntu, Fedora, CentOS, Arch Linux, Oracle Linux, Rocky Linux and AlmaLinux.
-
 This script will let you setup your own secure VPN server in just a few seconds.
-
-You can also check out [wireguard-install](https://github.com/angristan/wireguard-install), a simple installer for a simpler, safer, faster and more modern VPN protocol.
 
 ## Usage
 
 First, get the script and make it executable:
 
 ```bash
-curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
-chmod +x openvpn-install.sh
+curl -O https://raw.githubusercontent.com/mat3ev/openvpn-install/master/openvpn.sh
+chmod +x openvpn.sh
 ```
 
 Then run it:
 
 ```sh
-./openvpn-install.sh
+./openvpn.sh
 ```
 
 You need to run the script as root and have the TUN module enabled.
