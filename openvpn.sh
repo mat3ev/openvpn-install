@@ -213,8 +213,7 @@ access-control: fd42:42:42:42::/112 allow' >>/etc/unbound/openvpn.conf
 }
 
 function installQuestions() {
-	echo "Welcome to the OpenVPN installer!"
-	echo "The git repository is available at: https://github.com/angristan/openvpn-install"
+	echo "Инсталация на OpenVPN сървър."
 	echo ""
 
 	echo "I need to ask you a few questions before starting the setup."
@@ -232,22 +231,22 @@ function installQuestions() {
 	fi
 	APPROVE_IP=${APPROVE_IP:-n}
 	if [[ $APPROVE_IP =~ n ]]; then
-		read -rp "IP address: " -e -i "$IP" IP
+		read -rp "IP адрес: " -e -i "$IP" IP
 	fi
 	# If $IP is a private IP address, the server must be behind NAT
 	if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
 		echo ""
-		echo "It seems this server is behind NAT. What is its public IPv4 address or hostname?"
-		echo "We need it for the clients to connect to the server."
+		echo "Изглежда, че сървъра е зад NAT. Какъв е публичния IPv4 адрес или хостнейма?"
+		echo "Използва се от клиентите за връзка със сървъра."
 
 		PUBLICIP=$(curl -s https://api.ipify.org)
 		until [[ $ENDPOINT != "" ]]; do
-			read -rp "Public IPv4 address or hostname: " -e -i "$PUBLICIP" ENDPOINT
+			read -rp "IPv4 адрес или хостнейм: " -e -i "$PUBLICIP" ENDPOINT
 		done
 	fi
 
 	echo ""
-	echo "Checking for IPv6 connectivity..."
+	echo "Проверка за IPv6 свързансот..."
 	echo ""
 	# "ping6" and "ping -6" availability varies depending on the distribution
 	if type ping6 >/dev/null 2>&1; then
@@ -256,24 +255,24 @@ function installQuestions() {
 		PING6="ping -6 -c3 ipv6.google.com > /dev/null 2>&1"
 	fi
 	if eval "$PING6"; then
-		echo "Your host appears to have IPv6 connectivity."
+		echo "Излгежда, че имате IPv6 свързаност."
 		SUGGESTION="y"
 	else
-		echo "Your host does not appear to have IPv6 connectivity."
+		echo "Вашият сървър НЯМА IPv6 свързаност."
 		SUGGESTION="n"
 	fi
 	echo ""
 	# Ask the user if they want to enable IPv6 regardless its availability.
 	until [[ $IPV6_SUPPORT =~ (y|n) ]]; do
-		read -rp "Do you want to enable IPv6 support (NAT)? [y/n]: " -e -i $SUGGESTION IPV6_SUPPORT
+		read -rp "Желаете ли да включите IPv6 (NAT)? [y/n]: " -e -i $SUGGESTION IPV6_SUPPORT
 	done
 	echo ""
-	echo "What port do you want OpenVPN to listen to?"
-	echo "   1) Default: 1194"
-	echo "   2) Custom"
-	echo "   3) Random [49152-65535]"
+	echo "На кой порт желаете да бъде OpenVPN сървъра?"
+	echo "   1) По подразбиране: 1194"
+	echo "   2) По избор"
+	echo "   3) Случаен [49152-65535]"
 	until [[ $PORT_CHOICE =~ ^[1-3]$ ]]; do
-		read -rp "Port choice [1-3]: " -e -i 1 PORT_CHOICE
+		read -rp "Избор [1-3]: " -e -i 1 PORT_CHOICE
 	done
 	case $PORT_CHOICE in
 	1)
@@ -281,13 +280,13 @@ function installQuestions() {
 		;;
 	2)
 		until [[ $PORT =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
-			read -rp "Custom port [1-65535]: " -e -i 1194 PORT
+			read -rp "По избор [1-65535]: " -e -i 1194 PORT
 		done
 		;;
 	3)
 		# Generate random number within private ports range
 		PORT=$(shuf -i49152-65535 -n1)
-		echo "Random Port: $PORT"
+		echo "Случаен: $PORT"
 		;;
 	esac
 	echo ""
